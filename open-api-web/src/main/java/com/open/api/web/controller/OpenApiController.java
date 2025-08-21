@@ -67,6 +67,4 @@ public class OpenApiController {
 
         return result;
     }
-
-
 }

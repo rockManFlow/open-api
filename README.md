@@ -1,10 +1,7 @@
-# open-api-project
-java版开放接口统一网关鉴权demo项目
+# open-api
+java版开放接口统一网关鉴权项目
 
-open-api-common 公共基础配置
-
-open-api-web 开放接口 web
-
-
-详细介绍请跳转博客谢谢
-https://blog.csdn.net/qq_38011415/article/details/88779364
+核心目标
+1、鉴权、耗时等监控
+2、调用局域网内HTTP接口，支持配置外放的接口地址信息及后端服务ip等信息
+3、之后可以兼容dubbo等RPC接口的调用
