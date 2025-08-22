@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level - sessionId:[%X{sessionId}] - traceId:[%X{traceId}] %c{36} -- %m%n</Property>
+        <Property name="API_LOG_ROOT">/data/logs</Property>
+    </Properties>
+    <!--先定义所有的appender-->
+    <Appenders>
+        <!--这个输出控制台的配置-->
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <!--输出日志的格式-->
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+        <RollingRandomAccessFile name="RollingFileInfo"
+                                 immediateFlush="true"
+                                 fileName="${API_LOG_ROOT}/open-api-info.log"
+                                 filePattern="${API_LOG_ROOT}/${date:yyyy-MM}/open-api-info-%d{yyyy-MM-dd}-%i.zip">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <Filters>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <JsonPatternLayout charset="UTF-8" projectName="open-api" pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="1024M"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30">
+                <Delete basePath="${APP_LOG_ROOT}/" maxDepth="2">
+                    <IfFileName glob="*.*" />
+                    <!--保留15天 -->
+                    <IfLastModified age="15d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="RollingFileError"
+                                 immediateFlush="true"
+                                 fileName="${API_LOG_ROOT}/open-api-error.log"
+                                 filePattern="${API_LOG_ROOT}/${date:yyyy-MM}/open-api-error-%d{yyyy-MM-dd}-%i.zip">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout charset="UTF-8" pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="1024M"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30">
+                <Delete basePath="${APP_LOG_ROOT}/" maxDepth="2">
+                    <IfFileName glob="*.*" />
+                    <!--保留15天 -->
+                    <IfLastModified age="15d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="RollingAccessInfo"
+                                 immediateFlush="true"
+                                 fileName="${API_LOG_ROOT}/open-api-access.log"
+                                 filePattern="${API_LOG_ROOT}/${date:yyyy-MM}/open-api-access-%d{yyyy-MM-dd}-%i.zip">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <Filters>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <JsonPatternLayout charset="UTF-8" projectName="open-api" pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="1024M"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30">
+                <Delete basePath="${APP_LOG_ROOT}/" maxDepth="2">
+                    <IfFileName glob="*.*" />
+                    <!--保留15天 -->
+                    <IfLastModified age="15d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="info" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </Root>
+        <Logger name="com.open" additivity="false" includeLocation="true">
+            <AppenderRef ref="RollingFileInfo"/>
+            <AppenderRef ref="RollingFileError"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="com.open.api.util.AccessLogUtil" level="debug" additivity="false">
+            <AppenderRef ref="RollingAccessInfo"/>
+        </Logger>
+    </Loggers>
+</Configuration>

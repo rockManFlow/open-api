@@ -1,31 +1,20 @@
 package com.open.api.config.property;
 
+import com.open.api.model.AppIdModel;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Map;
+
 /**
- * 公共开关，key值 属性配置
- *
- * @author 程序员小强
  */
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "open.api.common.key")
+@ConfigurationProperties(prefix = "open.appId")
 public class ApplicationProperty {
-
     /**
-     * 是否校验签名 0-不校验
+     * appId,AppIdModel
      */
-    private Boolean isCheckSign = true;
-
-    /**
-     * 私钥
-     */
-    private String privateKey;
-
-    /**
-     * 验签公钥
-     */
-    private String publicKey;
+    private Map<String, AppIdModel> appKeyMap;
 }

@@ -10,8 +10,11 @@ import com.open.api.config.property.ApplicationProperty;
 import com.open.api.enums.ApiExceptionEnum;
 import com.open.api.exception.BusinessException;
 import com.open.api.model.ApiModel;
+import com.open.api.model.AppIdModel;
 import com.open.api.model.ResultModel;
 import com.open.api.util.ValidateUtils;
+import com.open.api.web.bo.GateWayRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -26,8 +29,6 @@ import java.util.TreeMap;
 
 /**
  * Api请求客户端
- *
- * @author 程序员小强
  */
 @Service
 public class ApiClient {
@@ -64,19 +65,20 @@ public class ApiClient {
      * @param signType        签名格式
      * @author 程序员小强
      */
-    public void checkSign(Map<String, Object> params, String requestRandomId, String charset, String signType) {
+    public void checkSign(GateWayRequest gateWayRequest) {
 
         try {
             //校验签名开关
             if (!applicationProperty.getIsCheckSign()) {
-                LOGGER.warn("【{}】>> 验签开关关闭", requestRandomId);
+                LOGGER.warn("【{}】>> 验签开关关闭", gateWayRequest.getRequestId());
                 return;
             }
 
-            //map类型转换
-            Map<String, String> map = new HashMap<>(params.size());
-            for (String s : params.keySet()) {
-                map.put(s, params.get(s).toString());
+            Map<String, AppIdModel> appKeyMap = applicationProperty.getAppKeyMap();
+            AppIdModel appIdModel = appKeyMap.get(gateWayRequest.getAppId());
+            if(appIdModel==null){
+                LOGGER.error("Not Exist appId:{}",gateWayRequest.getAppId());
+                throw new BusinessException(ApiExceptionEnum.INVALID_SIGN);
             }
 
             LOGGER.warn("【{}】 >> 验签参数 {}", requestRandomId, map);
