@@ -2,6 +2,8 @@ package com.open.api.model;
 
 import lombok.Data;
 
+import java.util.Set;
+
 /**
  * @author rock
  * @detail
@@ -14,4 +16,9 @@ public class AppIdModel {
      * 验签公钥
      */
     private String publicKey;
+
+    /**
+     * ip1:port1,ip2:port2,ip3:port3
+     */
+    private Set<String> remoteInfo;
 }

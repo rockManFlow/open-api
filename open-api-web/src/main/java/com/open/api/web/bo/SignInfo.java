@@ -6,16 +6,11 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @author rock
- * @detail
- * @date 2025/8/22 11:39
+ * @detail 加签消息体
+ * @date 2025/8/25 10:07
  */
 @Data
-public class BaseRequest {
-    /**
-     * 业务方appId
-     */
-    @NotBlank
-    private String appId;
+public class SignInfo {
     /**
      * 请求方法 HTTP
      */
