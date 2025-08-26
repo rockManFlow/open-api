@@ -50,7 +50,6 @@ public class HttpUtils {
         //创建Post对象
         HttpPost httpPost = new HttpPost(url);
         //设置Content-Type
-        httpPost.setHeader("Content-Type","application/json");
         if(MapUtils.isNotEmpty(headers)){
             Iterator<String> iterator = headers.keySet().iterator();
             while (iterator.hasNext()){

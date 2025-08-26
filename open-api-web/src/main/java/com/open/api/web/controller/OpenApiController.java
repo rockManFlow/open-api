@@ -22,10 +22,11 @@ public class OpenApiController {
      * 统一网关入口
      */
     @PostMapping("/gateway")
-    public ResultModel gateway(@Validated @RequestBody GateWayRequest gateWayRequest) throws Throwable {
+    public ResultModel gateway(@Validated @RequestBody GateWayRequest gateWayRequest) {
+        log.info("gateway request:{}",gateWayRequest);
         //请求接口
         ResultModel result = gateWayService.invoke(gateWayRequest);
-
+        log.info("gateway result:{}",result);
         return result;
     }
 }

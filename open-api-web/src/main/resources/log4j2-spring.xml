@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" monitorInterval="30">
     <Properties>
-        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level - sessionId:[%X{sessionId}] - traceId:[%X{traceId}] %c{36} -- %m%n</Property>
-        <Property name="API_LOG_ROOT">/data/logs</Property>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level - traceId:[%X{traceId}] %c{36} -- %m%n</Property>
+        <Property name="API_LOG_ROOT">D:/myProjects/open-api/logs</Property>
     </Properties>
     <!--先定义所有的appender-->
     <Appenders>
@@ -19,7 +19,7 @@
             <Filters>
                 <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
             </Filters>
-            <JsonPatternLayout charset="UTF-8" projectName="open-api" pattern="${LOG_PATTERN}"/>
+            <PatternLayout charset="UTF-8" projectName="open-api" pattern="${LOG_PATTERN}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="1024M"/>
@@ -63,7 +63,7 @@
             <Filters>
                 <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
             </Filters>
-            <JsonPatternLayout charset="UTF-8" projectName="open-api" pattern="${LOG_PATTERN}"/>
+            <PatternLayout charset="UTF-8" projectName="open-api" pattern="${LOG_PATTERN}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="1024M"/>

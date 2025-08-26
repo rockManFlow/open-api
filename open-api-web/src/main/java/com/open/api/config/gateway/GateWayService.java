@@ -2,12 +2,15 @@ package com.open.api.config.gateway;
 
 import com.open.api.config.property.ApplicationProperty;
 import com.open.api.config.sign.OpenSignature;
+import com.open.api.config.strategy.LoadBalanceStrategy;
 import com.open.api.enums.ApiExceptionEnum;
+import com.open.api.enums.StrategyEnum;
 import com.open.api.exception.BusinessException;
 import com.open.api.model.AppIdModel;
 import com.open.api.model.ResultModel;
 import com.open.api.web.bo.GateWayRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.*;
@@ -70,9 +73,19 @@ public class GateWayService {
             throw new BusinessException(ApiExceptionEnum.API_NOT_EXIST);
         }
 
+        //负载均衡
+        LoadBalanceStrategy loadBalanceStrategy = LoadBalanceStrategy.getLoadBalanceStrategy(StrategyEnum.getStrategyEnum(appIdModel.getLoadBalanceStrategy()).name());
+        Map<String,Integer> ipWeightMap=new HashMap<>(4);
+        Iterator<String> iterator = appIdModel.getRemoteInfo().iterator();
+        int index=0;
+        while (iterator.hasNext()){
+            ipWeightMap.put(iterator.next(),getWeight(appIdModel.getWeight(),index));
+            index++;
+        }
+
         //执行对应方法
         try {
-            StringBuilder uri=new StringBuilder("http://").append(getRandomNode(appIdModel.getRemoteInfo())).append("/").append(gateWayRequest.getUri());
+            StringBuilder uri=new StringBuilder("http://").append(loadBalanceStrategy.getLoadNode(ipWeightMap)).append("/").append(gateWayRequest.getUri());
             String resp = OpenClient.getOpenClient(gateWayRequest.getMethod()).invoke(uri.toString(),gateWayRequest.getContent(),gateWayRequest.getRequestId());
             return ResultModel.success(openSignature.encryptResult(resp,gateWayRequest.getRandomAesKey()));
         } catch (BusinessException e){
@@ -83,15 +96,10 @@ public class GateWayService {
         }
     }
 
-    /**
-     * 随机路由
-     * @param ipSet
-     * @return
-     */
-    public static String getRandomNode(Set<String> ipSet) {
-        if(ipSet.isEmpty()) return "";
-        Object[] array = ipSet.toArray();
-        int randomIndex = new Random().nextInt(array.length);
-        return (String) array[randomIndex];
+    private Integer getWeight(List<Integer> weight,int index){
+        if(CollectionUtils.isEmpty(weight)||weight.size()<=index){
+            return 0;
+        }
+        return weight.get(index);
     }
 }

@@ -14,7 +14,7 @@ public enum ApiExceptionEnum implements EnumInterface {
     API_NOT_EXIST("API_NOT_EXIST", "API方法不存在"),
     INVALID_PUBLIC_PARAM("INVALID_PUBLIC_PARAM", "无效公共参数 >> {0}"),
     INVALID_REQUEST_ERROR("INVALID_REQUEST_ERROR", " 请求方式 {0} 错误 ! 请使用 {1} 方式"),
-    INVALID_PARAM("INVALID_PARAM", "无效参数 >> 参数[{0}] >> 原因[{1}]"),
+    NO_AVAILABLE_SERVICE("NO_AVAILABLE_SERVICE", "No available service"),
     INVALID_SIGN("INVALID_SIGN", "无效签名"),
     NOT_SUPPORT_SIGN_TYPE("NOT_SUPPORT_SIGN_TYPE", "不支持的验签方式"),
     ;

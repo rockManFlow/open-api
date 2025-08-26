@@ -11,7 +11,7 @@ import java.util.Map;
  */
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "open.appId")
+@ConfigurationProperties(prefix = "open.app")
 public class ApplicationProperty {
     /**
      * appId,AppIdModel

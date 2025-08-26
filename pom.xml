@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.open.api</groupId>
-    <artifactId>open-api-project</artifactId>
+    <artifactId>open-api</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
 
